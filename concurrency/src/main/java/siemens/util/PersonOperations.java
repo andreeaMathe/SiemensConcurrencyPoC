@@ -3,7 +3,6 @@ package siemens.util;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -50,11 +49,14 @@ public class PersonOperations {
 		return persons;
 	}
 
-	public boolean addPerson(Person person, boolean synchronous) {
+	public boolean addPerson(Person person, boolean asynchronous, boolean journalToMemory) {
 		databaseConnection.createConnection();
 
-		if (synchronous == false)
+		if (asynchronous == true)
 			turnOffSync();
+
+		if (journalToMemory == true)
+			setJournalModeToMemory();
 
 		String query = "INSERT INTO person VALUES (?, ?)";
 		PreparedStatement ps = null;
@@ -80,6 +82,17 @@ public class PersonOperations {
 
 	private void turnOffSync() {
 		String settingsUpdate = "PRAGMA synchronous=OFF";
+		PreparedStatement st;
+		try {
+			st = databaseConnection.getConnection().prepareStatement(settingsUpdate);
+			st.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void setJournalModeToMemory() {
+		String settingsUpdate = "PRAGMA journal_mode = MEMORY";
 		PreparedStatement st;
 		try {
 			st = databaseConnection.getConnection().prepareStatement(settingsUpdate);
