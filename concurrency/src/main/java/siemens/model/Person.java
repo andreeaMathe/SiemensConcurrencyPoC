@@ -1,26 +1,29 @@
 package siemens.model;
 
+import java.util.Objects;
+import java.util.UUID;
+
 public class Person {
 
-	private int id;
+	private UUID id;
 	private String name;
 
 	public Person() {
 
 	}
 
-	public Person(int id, String name) {
+	public Person(UUID id, String name) {
 		super();
-		this.id = id;
-		this.name = name;
+		this.id = Objects.requireNonNull(id, "Id must not be null");
+		this.name = Objects.requireNonNull(name, "Name must not be null");
 	}
 
-	public int getId() {
+	public UUID getId() {
 		return id;
 	}
 
-	public void setId(int id) {
-		this.id = id;
+	public void setId(UUID id) {
+		this.id = Objects.requireNonNull(id, "Id must not be null");
 	}
 
 	public String getName() {
@@ -28,11 +31,11 @@ public class Person {
 	}
 
 	public void setName(String name) {
-		this.name = name;
+		this.name = Objects.requireNonNull(name, "Name must not be null");
 	}
 
 	@Override
 	public String toString() {
-		return "Person [id=" + id + ", name=" + name + "]";
+		return "Person [id=" + id.toString() + ", name=" + name + "]";
 	}
 }

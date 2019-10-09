@@ -2,6 +2,7 @@ package siemens.application;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import siemens.database.Database;
 import siemens.database.DatabaseConnection;
@@ -30,9 +31,9 @@ public class MainClass {
 
 		List<SqlTask> tasks = new ArrayList<>();
 //		MAYBE TRY GUID AND PRIMARY KEY ON TABLE
-		
+
 		for (int i = 0; i < n; ++i) {
-			tasks.add(new SqlTask(3, "test"));
+			tasks.add(new SqlTask(new Person(UUID.randomUUID(), "test")));
 		}
 
 //		System.out.println("Sequential DB access:");
@@ -68,10 +69,10 @@ public class MainClass {
 	}
 
 	private static class SqlTask implements Runnable {
-		Person person;
+		private Person personToBeAdded;
 
-		public SqlTask(int id, String name) {
-			person = new Person(id, name);
+		public SqlTask(Person person) {
+			personToBeAdded = person;
 		}
 
 		public void run() {
@@ -81,7 +82,7 @@ public class MainClass {
 
 			long startTime = System.currentTimeMillis();
 
-			personOperations.addPerson(person);
+			personOperations.addPerson(personToBeAdded);
 
 			long duration = System.currentTimeMillis() - startTime;
 			System.out.println("   SQL Insert completed: " + duration);

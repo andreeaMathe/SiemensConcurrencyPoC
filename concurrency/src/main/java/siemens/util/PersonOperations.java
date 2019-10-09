@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import siemens.database.DatabaseConnection;
 import siemens.model.Person;
@@ -28,7 +29,7 @@ public class PersonOperations {
 			rs = ps.executeQuery();
 			while (rs.next()) {
 				Person person = new Person();
-				person.setId(rs.getInt("id"));
+				person.setId(UUID.fromString(rs.getString("id")));
 				person.setName(rs.getString("name"));
 
 				persons.add(person);
@@ -54,7 +55,7 @@ public class PersonOperations {
 		PreparedStatement ps = null;
 		try {
 			ps = databaseConnection.getConnection().prepareStatement(query);
-			ps.setInt(1, person.getId());
+			ps.setString(1, person.getId().toString());
 			ps.setString(2, person.getName());
 			ps.executeUpdate();
 		} catch (SQLException e) {
@@ -78,7 +79,7 @@ public class PersonOperations {
 		PreparedStatement ps = null;
 		try {
 			ps = databaseConnection.getConnection().prepareStatement(query);
-			ps.setInt(1, person.getId());
+			ps.setString(1, person.getId().toString());
 			ps.executeUpdate();
 		} catch (SQLException e) {
 			System.err.println("Error when creating query: " + e.getMessage());
