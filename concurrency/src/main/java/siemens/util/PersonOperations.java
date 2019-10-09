@@ -3,6 +3,7 @@ package siemens.util;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -49,8 +50,12 @@ public class PersonOperations {
 		return persons;
 	}
 
-	public boolean addPerson(Person person) {
+	public boolean addPerson(Person person, boolean synchronous) {
 		databaseConnection.createConnection();
+
+		if (synchronous == false)
+			turnOffSync();
+
 		String query = "INSERT INTO person VALUES (?, ?)";
 		PreparedStatement ps = null;
 		try {
@@ -71,6 +76,17 @@ public class PersonOperations {
 		}
 
 		return true;
+	}
+
+	private void turnOffSync() {
+		String settingsUpdate = "PRAGMA synchronous=OFF";
+		PreparedStatement st;
+		try {
+			st = databaseConnection.getConnection().prepareStatement(settingsUpdate);
+			st.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public boolean deletePerson(Person person) {

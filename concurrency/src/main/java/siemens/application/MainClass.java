@@ -10,48 +10,16 @@ import siemens.model.Person;
 import siemens.util.PersonOperations;
 
 public class MainClass {
+	
+//	static int succededRequests = 0;
+	
 	public static void main(String[] args) {
-//		Database database = new Database("org.sqlite.JDBC", "jdbc:sqlite:sample.db", "", "");
-//		DatabaseConnection databaseConnection = new DatabaseConnection(database);
-//		PersonOperations personOperations = new PersonOperations(databaseConnection);
-
-//		System.out.println("Before adding...");
-//		List<Person> persons = personOperations.getAllPersons();
-//		personOperations.printListOfPersons(persons);
-//
-//		Person studentToAdd = new Person(48, "Fifty");
-//
-//		personOperations.addPerson(personToAdd);
-//
-//		System.out.println("After adding...");
-//		persons = personOperations.getAllPersons();
-//		personOperations.printListOfPersons(persons);
-
 		int n = 100;
-
 		List<SqlTask> tasks = new ArrayList<>();
-//		MAYBE TRY GUID AND PRIMARY KEY ON TABLE
 
 		for (int i = 0; i < n; ++i) {
 			tasks.add(new SqlTask(new Person(UUID.randomUUID(), "test")));
 		}
-
-//		System.out.println("Sequential DB access:");
-//
-//		Thread threads[] = new Thread[tasks.length];
-//		for (int i = 0; i < tasks.length; i++)
-//			threads[i] = new Thread(tasks[i]);
-//
-//		for (int i = 0; i < tasks.length; i++) {
-//			threads[i].start();
-//			try {
-//				threads[i].join();
-//			} catch (InterruptedException e) {
-//				e.printStackTrace();
-//			}
-//		}
-
-		System.out.println("Concurrent DB access:");
 
 		Thread threads[] = new Thread[n];
 		for (int i = 0; i < n; i++)
@@ -66,6 +34,8 @@ public class MainClass {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
+		
+//		System.out.println("Number of requests completed : " + succededRequests);
 	}
 
 	private static class SqlTask implements Runnable {
@@ -82,11 +52,11 @@ public class MainClass {
 
 			long startTime = System.currentTimeMillis();
 
-			personOperations.addPerson(personToBeAdded);
+			personOperations.addPerson(personToBeAdded, false);
 
 			long duration = System.currentTimeMillis() - startTime;
 			System.out.println("   SQL Insert completed: " + duration);
-
+//			succededRequests++;
 		}
 	}
 
