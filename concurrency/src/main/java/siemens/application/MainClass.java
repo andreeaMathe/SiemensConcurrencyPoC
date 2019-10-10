@@ -12,30 +12,28 @@ import siemens.util.PersonOperations;
 public class MainClass {
 
 	static int succededRequests = 0;
-	
+
 	public static void main(String[] args) {
-		
+
 		int n = 5000;
-		List<SqlTask> tasks = new ArrayList<>();
+		List<Thread> threads = new ArrayList<>();
 
 		for (int i = 0; i < n; ++i) {
-			tasks.add(new SqlTask(new Person(UUID.randomUUID(), "test")));
+			threads.add(new Thread(new SqlTask(new Person(UUID.randomUUID(), "test"))));
 		}
 
-		Thread threads[] = new Thread[n];
-		for (int i = 0; i < n; i++)
-			threads[i] = new Thread(tasks.get(i));
+		for (Thread t : threads) {
+			t.start();
+		}
 
-		for (int i = 0; i < n; i++)
-			threads[i].start();
-
-		for (int i = 0; i < n; i++)
+		for (int i = 0; i < n; i++) {
 			try {
-				threads[i].join();
+				threads.get(i).join();
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-		
+		}
+
 		System.out.println("Succeded requests : " + succededRequests);
 	}
 
