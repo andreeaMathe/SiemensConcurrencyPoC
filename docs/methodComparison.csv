@@ -1,0 +1,9 @@
+Method, Pro, Con, Succeded Concurrent Write Requests, Average time of response(for the succeded ones) 
+Default, , ,31,
+Larger page size, , , , 
+Increase cache memory, , , , 
+
+Synchronous = off, , , 61, 
+Journal mode = memory, , , , 
+Journal mode = WAL, , , , 
+Additional in-memory db, , , , 
