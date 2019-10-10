@@ -15,7 +15,7 @@ public class MainClass {
 
 	public static void main(String[] args) {
 
-		int n = 5000;
+		int n = 10000;
 		List<Thread> threads = new ArrayList<>();
 
 		for (int i = 0; i < n; ++i) {
@@ -45,7 +45,7 @@ public class MainClass {
 		}
 
 		public void run() {
-			Database database = new Database("org.sqlite.JDBC", "jdbc:sqlite:sample.db", "", "");
+			Database database = new Database("org.sqlite.JDBC", "jdbc:sqlite:src\\resources\\sample.db", "", "");
 			DatabaseConnection databaseConnection = new DatabaseConnection(database);
 			PersonOperations personOperations = new PersonOperations(databaseConnection);
 
