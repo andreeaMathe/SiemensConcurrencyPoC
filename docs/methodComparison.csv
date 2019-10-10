@@ -1,17 +1,12 @@
-Index, Method, Pro, Con, Succeded Concurrent Write Requests (out of 10k), Average time of response(for the succeded ones) 
-0,Default, , ,25-35,
+Crt, Method, Pro, Con, Succeded Concurrent Write Requests (out of 10k), Average time of response
+0,None, , ,25-35,
 1,Larger page size, , , , 
 2,Increase cache memory, , , , 
-
 3,Synchronous = off, , , 50-61, 
 4,Journal mode = memory, , , 23-28, 
 5,Journal mode = WAL, , , 20-34, 
 6,Additional in-memory db, , , , 
-
 7,async+memory, , , 40-70,
-8,async+wal, , , 47-62
-9,
-10,
-
-
-
+8,async+wal, , , 47-62,
+9,,,,,
+10,,,,,
