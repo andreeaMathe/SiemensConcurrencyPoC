@@ -84,29 +84,18 @@ public class PersonOperations {
 	}
 
 	private void turnOffSync() {
-		String settingsUpdate = "PRAGMA synchronous=OFF";
-		PreparedStatement st;
-		try {
-			st = databaseConnection.getConnection().prepareStatement(settingsUpdate);
-			st.executeUpdate();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		executeStatement("PRAGMA synchronous=OFF");
 	}
-
+	
 	private void setJournalModeToMemory() {
-		String settingsUpdate = "PRAGMA journal_mode = MEMORY";
-		PreparedStatement st;
-		try {
-			st = databaseConnection.getConnection().prepareStatement(settingsUpdate);
-			st.executeUpdate();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		executeStatement("PRAGMA journal_mode = MEMORY");
 	}
 	
 	private void setJournalModeToWal() {
-		String settingsUpdate = "PRAGMA journal_mode = WAL";
+		executeStatement("PRAGMA journal_mode = WAL");
+	}
+
+	private void executeStatement(String settingsUpdate) {
 		PreparedStatement st;
 		try {
 			st = databaseConnection.getConnection().prepareStatement(settingsUpdate);
