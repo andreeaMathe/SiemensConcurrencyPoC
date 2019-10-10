@@ -49,17 +49,9 @@ public class PersonOperations {
 		return persons;
 	}
 
-	public boolean addPerson(Person person, boolean asynchronous, boolean journalToMemory, boolean wal) {
+	public boolean addPerson(Person person, Synchronous sync, JournalMode journalMode) {
 		databaseConnection.createConnection();
-
-		if (asynchronous == true)
-			turnOffSync();
-
-		if (journalToMemory == true)
-			setJournalModeToMemory();
-		
-		if (wal == true)
-			setJournalModeToWal();
+		configureConnection(sync, journalMode);
 
 		String query = "INSERT INTO person VALUES (?, ?)";
 		PreparedStatement ps = null;
@@ -79,20 +71,24 @@ public class PersonOperations {
 				System.err.println("Failed closing streams: " + e.getMessage());
 			}
 		}
-
 		return true;
 	}
 
-	private void turnOffSync() {
-		executeStatement("PRAGMA synchronous=OFF");
-	}
-	
-	private void setJournalModeToMemory() {
-		executeStatement("PRAGMA journal_mode = MEMORY");
-	}
-	
-	private void setJournalModeToWal() {
-		executeStatement("PRAGMA journal_mode = WAL");
+	private void configureConnection(Synchronous sync, JournalMode journalMode) {
+		
+		if (sync == Synchronous.Off)
+			executeStatement("PRAGMA synchronous=OFF");
+
+		switch (journalMode) {
+		case None:
+			break;
+		case Memory:
+			executeStatement("PRAGMA journal_mode = MEMORY");
+			break;
+		case WAL:
+			executeStatement("PRAGMA journal_mode = WAL");
+			break;
+		}
 	}
 
 	private void executeStatement(String settingsUpdate) {
