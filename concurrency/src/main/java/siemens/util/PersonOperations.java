@@ -45,11 +45,10 @@ public class PersonOperations {
 				System.err.println("Failed closing streams: " + e.getMessage());
 			}
 		}
-
 		return persons;
 	}
 
-	public boolean addPerson(Person person, Synchronous sync, JournalMode journalMode) {
+	public boolean addPerson(Person person, SynchronousSetting sync, JournalMode journalMode) {
 		databaseConnection.createConnection();
 		configureConnection(sync, journalMode);
 
@@ -74,13 +73,14 @@ public class PersonOperations {
 		return true;
 	}
 
-	private void configureConnection(Synchronous sync, JournalMode journalMode) {
-		
-		if (sync == Synchronous.Off)
+	private void configureConnection(SynchronousSetting sync, JournalMode journalMode) {
+
+		if (sync == SynchronousSetting.Off)
 			executeStatement("PRAGMA synchronous=OFF");
 
 		switch (journalMode) {
 		case None:
+			executeStatement("PRAGMA journal_mode = OFF");
 			break;
 		case Memory:
 			executeStatement("PRAGMA journal_mode = MEMORY");
@@ -95,38 +95,9 @@ public class PersonOperations {
 		PreparedStatement st;
 		try {
 			st = databaseConnection.getConnection().prepareStatement(settingsUpdate);
-			st.executeUpdate();
+		st.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}
-	}
-
-	public boolean deletePerson(Person person) {
-		databaseConnection.createConnection();
-		String query = "DELETE FROM person WHERE Id = (?)";
-		PreparedStatement ps = null;
-		try {
-			ps = databaseConnection.getConnection().prepareStatement(query);
-			ps.setString(1, person.getId().toString());
-			ps.executeUpdate();
-		} catch (SQLException e) {
-			System.err.println("Error when creating query: " + e.getMessage());
-			return false;
-		} finally {
-			try {
-				ps.close();
-				databaseConnection.getConnection().close();
-			} catch (SQLException e) {
-				System.err.println("Failed closing streams: " + e.getMessage());
-			}
-		}
-
-		return true;
-	}
-
-	public void printListOfPersons(List<Person> persons) {
-		for (Person stud : persons) {
-			System.out.println(stud.toString());
 		}
 	}
 }

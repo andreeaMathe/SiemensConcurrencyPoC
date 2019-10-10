@@ -1,6 +1,6 @@
 package siemens.util;
 
-public enum Synchronous {
+public enum SynchronousSetting {
 	None, 
 	Off
 }

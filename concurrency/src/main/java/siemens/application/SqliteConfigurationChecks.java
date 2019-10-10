@@ -9,7 +9,7 @@ import siemens.database.DatabaseConnection;
 import siemens.model.Person;
 import siemens.util.JournalMode;
 import siemens.util.PersonOperations;
-import siemens.util.Synchronous;
+import siemens.util.SynchronousSetting;
 
 public class SqliteConfigurationChecks {
 
@@ -51,11 +51,11 @@ public class SqliteConfigurationChecks {
 
 			long startTime = System.currentTimeMillis();
 
-			if (personOperations.addPerson(personToBeAdded, Synchronous.Off, JournalMode.WAL))
+			if (personOperations.addPerson(personToBeAdded, SynchronousSetting.Off, JournalMode.Memory))
 				succededRequests++;
 
 			long duration = System.currentTimeMillis() - startTime;
-			System.out.println("   SQL Insert completed: " + duration);
+			System.out.println("\tSQL Insert completed: " + duration);
 		}
 	}
 }
