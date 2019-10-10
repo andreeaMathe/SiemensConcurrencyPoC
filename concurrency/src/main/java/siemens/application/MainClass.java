@@ -11,8 +11,11 @@ import siemens.util.PersonOperations;
 
 public class MainClass {
 
+	static int succededRequests = 0;
+	
 	public static void main(String[] args) {
-		int n = 100;
+		
+		int n = 5000;
 		List<SqlTask> tasks = new ArrayList<>();
 
 		for (int i = 0; i < n; ++i) {
@@ -32,6 +35,8 @@ public class MainClass {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
+		
+		System.out.println("Succeded requests : " + succededRequests);
 	}
 
 	private static class SqlTask implements Runnable {
@@ -48,7 +53,8 @@ public class MainClass {
 
 			long startTime = System.currentTimeMillis();
 
-			personOperations.addPerson(personToBeAdded, true, true);
+			if (personOperations.addPerson(personToBeAdded, false, false))
+				succededRequests++;
 
 			long duration = System.currentTimeMillis() - startTime;
 			System.out.println("   SQL Insert completed: " + duration);
