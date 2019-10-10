@@ -51,7 +51,7 @@ public class MainClass {
 
 			long startTime = System.currentTimeMillis();
 
-			if (personOperations.addPerson(personToBeAdded, false, false))
+			if (personOperations.addPerson(personToBeAdded, true, false, true))
 				succededRequests++;
 
 			long duration = System.currentTimeMillis() - startTime;

@@ -49,13 +49,16 @@ public class PersonOperations {
 		return persons;
 	}
 
-	public boolean addPerson(Person person, boolean asynchronous, boolean journalToMemory) {
+	public boolean addPerson(Person person, boolean asynchronous, boolean journalToMemory, boolean wal) {
 		databaseConnection.createConnection();
 
 		if (asynchronous == true)
 			turnOffSync();
 
 		if (journalToMemory == true)
+			setJournalModeToMemory();
+		
+		if (wal == true)
 			setJournalModeToWal();
 
 		String query = "INSERT INTO person VALUES (?, ?)";
