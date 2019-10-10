@@ -56,7 +56,7 @@ public class PersonOperations {
 			turnOffSync();
 
 		if (journalToMemory == true)
-			setJournalModeToMemory();
+			setJournalModeToWal();
 
 		String query = "INSERT INTO person VALUES (?, ?)";
 		PreparedStatement ps = null;
@@ -93,6 +93,17 @@ public class PersonOperations {
 
 	private void setJournalModeToMemory() {
 		String settingsUpdate = "PRAGMA journal_mode = MEMORY";
+		PreparedStatement st;
+		try {
+			st = databaseConnection.getConnection().prepareStatement(settingsUpdate);
+			st.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void setJournalModeToWal() {
+		String settingsUpdate = "PRAGMA journal_mode = WAL";
 		PreparedStatement st;
 		try {
 			st = databaseConnection.getConnection().prepareStatement(settingsUpdate);
