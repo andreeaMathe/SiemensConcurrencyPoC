@@ -1,12 +1,9 @@
-Crt, Method, Pro, Con, Succeded Concurrent Write Requests (out of 10k), Average time of response
-0,None, , ,25-35,
-1,Larger page size, , , , 
-2,Increase cache memory, , , , 
-3,Synchronous = off, , , 50-61, 
-4,Journal mode = memory, , , 23-28, 
-5,Journal mode = WAL, , , 20-34, 
-6,Additional in-memory db, , , , 
-7,async+memory, , , 40-70,
-8,async+wal, , , 47-62,
-9,,,,,
-10,,,,,
+Crt, Method, Pro, Con, Succeded Concurrent Write Requests (out of 10k)
+0,None, -, -,25-35
+1,Larger page size, increases response time when reading, slows down the write processes,
+2,Increase cache memory, , ,
+3,Synchronous = off, speeds up the process, if the application running sqlite crashes the db might become corrupt, 50-61
+4,Journal mode = memory, stores the data in RAM, if the application running sqlite crashes the db might become corrupt, 23-28
+5,Journal mode = WAL, faster, more detailed at https://www.sqlite.org/wal.html, 30-36
+6,async+memory, , , 40-70
+7,async+wal, , , 47-62

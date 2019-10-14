@@ -15,6 +15,14 @@ public class SqliteConfigurationChecks {
 
 	static int succededRequests = 0;
 
+	private static SynchronousSetting synchronousSetting;
+	private static JournalMode journalMode;
+
+	public SqliteConfigurationChecks(SynchronousSetting ss, JournalMode jm) {
+		synchronousSetting = ss;
+		journalMode = jm;
+	}
+
 	public void Run(int numberOfThreads) {
 
 		List<Thread> threads = new ArrayList<>();
@@ -51,8 +59,11 @@ public class SqliteConfigurationChecks {
 
 			long startTime = System.currentTimeMillis();
 
-			if (personOperations.addPerson(personToBeAdded, SynchronousSetting.Off, JournalMode.Memory))
-				succededRequests++;
+			if (personOperations.addPerson(personToBeAdded, synchronousSetting, journalMode)) {
+				synchronized (this) {
+					succededRequests++;
+				}
+			}
 
 			long duration = System.currentTimeMillis() - startTime;
 			System.out.println("\tSQL Insert completed: " + duration);
